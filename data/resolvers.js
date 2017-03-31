@@ -1,4 +1,3 @@
-import { find, filter } from 'lodash';
 import { pubsub } from './subscriptions';
 
 const authors = [
@@ -18,12 +17,12 @@ const resolveFunctions = {
       return posts;
     },
     author(_, { id }) {
-      return find(authors, { id: id });
+      return authors.find(author => author.id === id)
     },
   },
   Mutation: {
     upvotePost(_, { postId }) {
-      const post = find(posts, { id: postId });
+      const post = posts.find(post => post.id === postId)
       if (!post) {
         throw new Error(`Couldn't find post with id ${postId}`);
       }
@@ -39,12 +38,12 @@ const resolveFunctions = {
   },
   Author: {
     posts(author) {
-      return filter(posts, { authorId: author.id });
+      return posts.filter(post => post.authorId === author.id)
     },
   },
   Post: {
     author(post) {
-      return find(authors, { id: post.authorId });
+      return authors.find(author => author.id === post.authorId)
     },
   },
 };
